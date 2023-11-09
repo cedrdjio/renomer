@@ -1,0 +1,198 @@
+<div class="row">
+  <div class="col-12 mt-3">
+    <div
+      class="table-responsive p-3"
+      *ngIf="values | async as response;"
+    >
+      <table
+        class="table table-bordered align-middle"
+        aria-describedby="default table"
+      >
+        <thead>
+          <th scope="col">
+            {{ firstColumn }}
+          </th>
+          <th scope="col" *ngFor="let column of columns">
+            {{ column.name }}
+          </th>
+          <th scope="col" *ngIf="hasOptions">Options</th>
+        </thead>
+        <tbody class="table-group-divider" *ngIf="(response.totalElements !=0 || response.datas.length !=0 ) else noDat">
+          <tr *ngFor="let item of response.datas">
+            <td *ngFor="let col of mColumns">
+
+
+                <ng-container *ngIf="col.propertyName === 'status'">
+                    <span
+                        class="badge"
+                        [ngClass]="{
+                  'bg-info': item.status === userStatus.PASSWORD_VALIDATION,
+                  'bg-primary': item.status === userStatus.ACTIVE || item.status === generalStatus.ACTIVE,
+                  'bg-warning': item.status === userStatus.WAITING_VALIDATION,
+                  'bg-danger': item.status === userStatus.BLOCKED || item.status === generalStatus.BLOCKED  || item.status === generalStatus.DISABLED || item.status === generalStatus.DEACTIVATED,
+
+                }"
+                    >{{ item.status }}</span
+                    >
+                </ng-container>
+                <ng-container>
+                    <span
+                        *ngIf="col.propertyName === 'role'"
+                        class="badge"
+                        [ngClass]="{
+                  'bg-primary': item.role === role.ADMIN_ROOT,
+                  'bg-secondary': item.role === role.ADMIN_USER,
+                  'bg-dark': item.role === role.PARTNER_MANAGER,
+                  'bg-warning': item.role === role.CUSTOMER
+                }"
+                    >{{ item.role }}</span
+                    >
+                </ng-container>
+
+                <ng-container *ngIf="col.propertyName == 'BirthDate'">
+                <span>
+                  {{item[col.propertyName] | date}}
+                 </span>
+                </ng-container>
+
+                <ng-container *ngIf="col.propertyName == 'openAt'">
+                <span>
+                  {{item[col.propertyName]  }}
+                 </span>
+                </ng-container>
+
+                <ng-container *ngIf="col.propertyName == 'closeAt'">
+                <span>
+                  {{item[col.propertyName] }}
+                 </span>
+                </ng-container>
+
+              <ng-container *ngIf="col.propertyName != 'status'
+                &&col.propertyName !='role'
+                &&col.propertyName !='openAt'
+                &&col.propertyName !='closeAt'
+                &&col.propertyName !='BirthDate'"
+              >
+                 <span>
+                    {{ item[col.propertyName] }}
+                   </span>
+              </ng-container>
+
+
+            </td>
+
+
+
+            <td *ngIf="hasOptions">
+              <a
+                title="Modifier"
+                style="margin-right: 5%"
+                *ngIf="isEditable || isOnlyForRoot"
+                (click)="edit(item)"
+                >
+                <span
+                  style="color: blue"
+                  [inlineSVG]="'./assets/images/icons/duotune/general/gen055.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+               </a>
+
+                <a
+                    title="Envoyer le lien d'activation"
+                    style="margin-right: 5%"
+                    *ngIf="(isSendLink || isOnlyForRoot) "
+                    (click)="send(item)"
+                >
+                <span
+                    *ngIf="item.status === userStatus.CREATED || item.status === userStatus.WAITING_VALIDATION"
+                    style="color: blueviolet"
+                    [inlineSVG]="'./assets/images/icons/duotune/general/gen016.svg'"
+                    class="svg-icon svg-icon-3"
+                ></span>
+                </a>
+
+                <a
+                    title="Voir les points de vente"
+                    style="margin-right: 5%"
+                    *ngIf="(hasPos) "
+                    (click)="showPos(item)"
+                >
+                <span
+
+                    style="color: blueviolet"
+                    [inlineSVG]="'./assets/images/icons/duotune/ecommerce/ecm006.svg'"
+                    class="svg-icon svg-icon-3"
+                ></span>
+                </a>
+
+              <a
+                title="Activer/Désactiver"
+                style="margin-right: 5%"
+                *ngIf="(isHideable || isOnlyForRoot)"
+                (click)="hideOrShow(item[idRef])"
+                >
+                <span
+                  style="color: red"
+                  *ngIf="item.status === generalStatus.ACTIVE || item.status === userStatus.ACTIVE "
+                  [inlineSVG]="'./assets/images/icons/duotune/general/gen040.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+                <span
+                  style="color: green"
+                  *ngIf="item.status === userStatus.BLOCKED  || item.status === generalStatus.BLOCKED || item.status === userStatus.BLOCKED || item.status === generalStatus.DISABLED || item.status === generalStatus.DEACTIVATED"
+                  [inlineSVG]="'./assets/images/icons/duotune/general/gen037.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+
+                </a>
+
+              <a
+                title="Supprimer"
+                style="margin-right: 5%"
+                *ngIf="isDeletable"
+                (click)="delete(item)"
+                >
+                <span
+                  style="color: red"
+                  [inlineSVG]="'./assets/images/icons/duotune/general/gen027.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span></a>
+
+              <a
+                title="Détails"
+                style="margin-right: 5%"
+                *ngIf="hasDetails"
+                (click)="showDetails(item)"
+                > <span
+                style="color: darkorchid"
+                [inlineSVG]="'./assets/images/icons/duotune/general/gen022.svg'"
+                class="svg-icon svg-icon-3"
+              ></span></a>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+      <ngb-pagination
+        class="d-flex justify-content-center mt-3 pagination pagination-primary"
+        [(page)]="page"
+        (pageChange)="onPageChange(page)"
+        [pageSize]="pageSize"
+        [collectionSize]="response.totalElements"
+        [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+      ></ngb-pagination>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #noDat>
+
+  <tbody>
+  <tr>
+    <td class="text-center card-label fw-bolder fs-3" colspan="10">Aucune donnée trouvée</td>
+  </tr>
+  </tbody>
+
+</ng-template>

@@ -1,0 +1,48 @@
+a{
+    text-decoration: none!important;
+}
+
+.mdi{
+    font-size: x-large !important;
+}
+
+@media (max-width: 1150px){
+    .logo-icon img{
+        display: none;
+    }
+}
+
+@media (min-width: 1150px){
+    .logo-icon1 img{
+        display: none;
+    }
+}
+
+
+@media (min-width: 768px){
+    #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .logo-icon img {
+        display: none;
+    }
+
+    #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .logo-icon1 img {
+        display: block;
+    }
+}
+
+.logo-wrapper{
+  width: 90%;
+}
+
+
+.toggle-sidebar {
+  display: none;
+}
+
+.profile-greeting {
+
+  display: none;
+}
+
+.profile-media{
+  height: 35px;
+}

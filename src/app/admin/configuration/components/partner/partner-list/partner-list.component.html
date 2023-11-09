@@ -1,0 +1,184 @@
+<div class="page-body">
+    <app-breadcrumb [title]="'Enseignes'" [items]="['Acceuil']" [active_item]="'Enseignes'"></app-breadcrumb>
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="media">
+                            <form [formGroup]="searchForm" class="form-inline" >
+                                <div class="form-group mb-0">
+                                    <a
+                                        [hidden]="isFilter"
+                                        type="button"
+                                        class="btn btn-info btn-sm cursor-pointer me-1 mt-2 mb-2 "
+                                        (click)="search(searchC)"
+                                    >
+
+                                        Rechercher
+
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                    <a
+                                        [hidden]="!isFilter"
+                                        type="button"
+                                        class="btn btn-info btn-sm cursor-pointer me-1 mt-2 mb-2"
+                                        (click)="reset()"
+                                    >
+
+                                        Reinitialiser
+
+                                    </a>
+                                </div>
+                            </form>
+                            <div class="media-body text-end">
+                                <form class="d-inline-flex">
+                                    <div class="btn btn-primary" (click)="openModal(addM)">Ajouter</div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <app-default-table [columns]="columns"
+                                           [page]="page"
+                                           [values]="datas"
+                                           [pageSize]="limit"
+                                           [editRef]="addM"
+                                           [hasDetails]="true"
+                                           [hasPos]="true"
+                                           [isSendLink]="true"
+                                           [isDeletable]="false"
+                                           [isOnlyForRoot]="true"
+                                           (onEdit)="openEditModal($event.ref, $event.content)"
+                                           (onPageChangeEvent)="onPageChange($event)"
+                                           (onHide)="openStatusModal($event)"
+                                           (onShowDetails)="showDetails($event)"
+                                           (onShowPos)="showPos($event)"
+                        >
+
+                        </app-default-table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+
+</div>
+
+
+<ng-template #addM let-modal>
+    <div class="modal-header ">
+        <h5 *ngIf="!(mode ==='EDIT')" class="modal-title " id="exampleModalCenterTitle ">Ajouter une enseigne</h5>
+        <h5 *ngIf="(mode ==='EDIT')" class="modal-title " id="exampleModalCenterTitle2 ">Modifier une enseigne</h5>
+        <button type="button " class="btn btn-light " data-dismiss="modal " (click)="hideModal() ">&times;
+        </button>
+    </div>
+    <div class="modal-body ">
+        <form [formGroup]="addForm">
+
+            <div class="form-group mb-3">
+                <label for="label">Nom de l'enseigne</label>
+                <input type="text" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['label'].errors}" formControlName="label" id="label" placeholder="Entrer le label de l'enseigne">
+                <div *ngIf="submitted && addFormControls['label'].errors" class="invalid-feedback">
+                    <div *ngIf="addFormControls['label'].errors?.['required']">Champ Requis</div>
+                </div>
+            </div>
+
+
+            <div class="form-group  mb-3">
+                <label for="description">Description</label>
+                <textarea type="desc"  class="form-control" formControlName="description"  [ngClass]="{'is-invalid': submitted && addFormControls['description'].errors}"
+                          rows="3" id="description" placeholder="Entrer la description" ></textarea>
+                <div *ngIf="submitted && addFormControls['description'].errors" class="invalid-feedback">
+                    <div *ngIf="addFormControls['description'].errors?.['required']">Champ Requis</div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer ">
+        <button type="button" class="btn btn-primary" (click)="add()" [disabled]="addForm.invalid" >
+            <ng-container *ngIf="!isLoading">
+                <span *ngIf="(mode ==='EDIT')" class="indicator-label">Modifier</span>
+                <span *ngIf="!(mode ==='EDIT')" class="indicator-label">Ajouter</span>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+
+        </button>
+    </div>
+</ng-template>
+
+
+<ng-template #searchC let-modal>
+    <div class="modal-header pb-10 pb-lg-8">
+        <div class="text-gray-400 fw-bold fs-6">
+            <span class="indicator-label">Rechercher une enseigne</span>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div
+            class="row g-3 needs-validation"
+            [formGroup]="searchForm">
+
+            <div class="col-md-6">
+                <label>
+                    Nom de l'enseigne
+                </label>
+                <input class="form-control"
+                       placeholder="Entrer le nom du partenaire"  name="code" formControlName="term" type="text"/>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button color="danger" type="reset" class="btn btn-sm btn-outline-danger" (click)="hideModal()">Annuler</button>
+        <button type="submit" class="btn btn-sm btn-outline-primary"  id="kt_sign_in_submit" color="primary">
+            <ng-container *ngIf="!isLoading">
+                <span  class="indicator-label" (click)="searchPartner()">Rechercher</span>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>
+
+
+<ng-template #deleteM let-modal>
+    <div class="modal-header ">
+        <h5 class="modal-title ">Confirm...</h5>
+        <button type="button" class="btn btn-light " data-dismiss="modal " (click)="hideModal() ">&times;
+        </button>
+    </div>
+
+    <div class="modal-body ">
+        Voulez-vous vraiment modifier le status de cette enseigne?
+    </div>
+
+    <div class="modal-footer ">
+        <button type="button" class="btn btn-sm btn-outline-danger " (click)="hideModal()">Annuler</button>
+        <button type="button" class="btn btn-sm btn-outline-primary " data-dismiss="modal" (click)="activateOrDeactivate(partner.id)">
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+            <ng-container *ngIf="!isLoading">
+                <span class="indicator-label">Confirmer</span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>
+
+

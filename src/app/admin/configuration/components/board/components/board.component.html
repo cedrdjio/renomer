@@ -1,0 +1,126 @@
+<div class="page-body" >
+  <app-breadcrumb [title]="'Tableau de bord'" [items]="['Acceuil']" [active_item]="'Tableau de bord'"></app-breadcrumb>
+  <!-- Container-fluid starts-->
+  <div class="container-fluid" *ngIf="isAdmin" >
+    <div class="row second-chart-list third-news-update" *ngIf="datas$ | async as data;">
+      <div class="col-sm-3 col-xl-3 col-lg-3">
+        <div class="card o-hidden">
+          <div class="bg-primary b-r-4 card-body">
+            <div class="media static-top-widget">
+              <div class="align-self-center text-center">
+                <app-feather-icons [icon]="'user'"></app-feather-icons>
+              </div>
+              <div class="media-body"><span class="m-0">Clients</span>
+                <h4 class="mb-0 counter">{{data.clients.totalElements}}</h4><i class="icon-bg" data-feather="user"></i>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 col-xl-3 col-lg-3">
+        <div class="card o-hidden">
+          <div class="bg-secondary b-r-4 card-body">
+            <div class="media static-top-widget">
+              <div class="align-self-center text-center"><app-feather-icons [icon]="'globe'"></app-feather-icons></div>
+              <div class="media-body"><span class="m-0">Pays</span>
+                <h4 class="mb-0 counter">{{data.countries.totalElements}}</h4><i class="icon-bg" data-feather="globe"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 col-xl-3 col-lg-3">
+        <div class="card o-hidden">
+          <div class="bg-primary b-r-4 card-body">
+            <div class="media static-top-widget">
+              <div class="align-self-center text-center"><app-feather-icons [icon]="'clipboard'"></app-feather-icons></div>
+              <div class="media-body"><span class="m-0">Enseignes</span>
+                <h4 class="mb-0 counter">{{data.partners.totalElements}}</h4><i class="icon-bg" data-feather="clipboard"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 col-xl-3 col-lg-3">
+        <div class="card o-hidden">
+          <div class="bg-primary b-r-4 card-body">
+            <div class="media static-top-widget">
+              <div class="align-self-center text-center"><app-feather-icons [icon]="'user-plus'"></app-feather-icons></div>
+              <div class="media-body"><span class="m-0">Administrateurs</span>
+                <h4 class="mb-0 counter" >{{data.users.totalElements}}</h4>
+                <i class="icon-bg" data-feather="user-plus"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid" *ngIf="isPartner" >
+        <div class="row second-chart-list third-news-update" *ngIf="datasPartners$ | async as data;">
+            <div class="col-sm-3 col-xl-3 col-lg-3">
+                <div class="card o-hidden">
+                    <div class="bg-primary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center">
+                                <app-feather-icons [icon]="'truck'"></app-feather-icons>
+                            </div>
+                            <div class="media-body"><span class="m-0">Point de vente</span>
+                                <h4 class="mb-0 counter">{{data.pos.totalElements}}</h4><i class="icon-bg" data-feather="truck"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xl-3 col-lg-3">
+                <div class="card o-hidden">
+                    <div class="bg-secondary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><app-feather-icons [icon]="'cast'"></app-feather-icons></div>
+                            <div class="media-body"><span class="m-0">Catégories</span>
+                                <h4 class="mb-0 counter">0</h4><i class="icon-bg" data-feather="cast"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xl-3 col-lg-3">
+                <div class="card o-hidden">
+                    <div class="bg-primary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><app-feather-icons [icon]="'shopping-bag'"></app-feather-icons></div>
+                            <div class="media-body"><span class="m-0">Produits</span>
+                                <h4 class="mb-0 counter">0</h4><i class="icon-bg" data-feather="shopping-bag"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xl-3 col-lg-3">
+                <div class="card o-hidden">
+                    <div class="bg-primary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><app-feather-icons [icon]="'shopping-cart'"></app-feather-icons></div>
+                            <div class="media-body"><span class="m-0">Commandes</span>
+                                <h4 class="mb-0 counter" >0</h4>
+                                <i class="icon-bg" data-feather="shopping-cart"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+</div>

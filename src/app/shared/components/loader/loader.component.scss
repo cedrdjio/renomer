@@ -1,0 +1,29 @@
+.page-loader-wrapper {
+  z-index: 99999999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  background: #f5f8fa;
+  overflow: hidden;
+  text-align: center;
+}
+
+.page-loader-wrapper p {
+  font-size: 13px;
+  font-weight: 700;
+  color: #777;
+  margin-top: 10px;
+}
+
+.page-loader-wrapper .loader {
+  position: relative;
+  top: calc(40% - 30px);
+}
+
+
+.loader-wrapper.loderhide {
+  display: none;
+}

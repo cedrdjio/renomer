@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+
+
+
+/* Importing Bootstrap SCSS file. */
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+@import "~@ng-select/ng-select/themes/material.theme.css";
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.card .card-body {
+  padding: 10px !important;
+}
+
+
+.card .card-header {
+  padding: 20px !important;
+}
+
+
+
+/* You can add global styles to this file, and also import other style files */
+//@import "./assets/scss/app.scss";
+
+.router-wrapper  {
+  position:  relative;
+  overflow:  hidden;
+  width:  100vw;
+  height:  calc(100%  -  47px);
+  perspective:  1200px;
+  transform-style:  preserve-3d;
+}
+
+:host  {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #60d7a9;
+}
+
+@import "~@ng-select/ng-select/themes/default.theme.css";
+

@@ -1,0 +1,45 @@
+<div class="page-header">
+  <div class="header-wrapper row m-0">
+    <form class="form-inline search-full col" action="#" method="get">
+      <div class="form-group w-100">
+        <div class="Typeahead Typeahead--twitterUsers">
+          <div class="u-posRelative">
+
+          </div>
+          <div class="Typeahead-menu"></div>
+        </div>
+      </div>
+    </form>
+    <div class="header-logo-wrapper col-auto p-0">
+      <div class="logo-wrapper"><a ><img class="img-fluid" src="assets/images/DOUNS/PNG/Douns.png" alt="douns"></a></div>
+      <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i></div>
+    </div>
+    <div class="left-header col horizontal-wrapper ps-0">
+      <ul class="horizontal-menu">
+
+      </ul>
+    </div>
+    <div class="nav-right col-8 pull-right right-header p-0">
+      <ul class="nav-menus">
+
+        <li>
+          <div class="mode"><i class="fa fa-moon-o"></i></div>
+        </li>
+
+        <li class="maximize"><a class="text-dark" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a></li>
+        <li class="profile-nav onhover-dropdown p-0 me-0">
+          <div class="media profile-media"><img style="height: 35px;" class="b-r-10" src="../assets/images/user.jpg" alt="">
+            <div class="media-body"><span>{{firsname}} {{lastname}}</span>
+              <p class="mb-0 font-roboto">Administrateur <i class="middle fa fa-angle-down"></i></p>
+            </div>
+          </div>
+          <ul class="profile-dropdown onhover-show-div">
+            <li><a ><i data-feather="settings"></i><span>Paramètres</span></a></li>
+            <li><a (click)="logout()" ><i data-feather="log-in"> </i><span>Sortie</span></a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>

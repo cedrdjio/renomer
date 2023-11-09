@@ -1,0 +1,20 @@
+
+<!-- Page Header Start-->
+<app-header></app-header>
+<!-- Page Header Ends-->
+<div class="page-body-wrapper">
+    <!-- Page Sidebar Start-->
+    <div class="sidebar-wrapper" [class.close_icon]="navServices.collapseSidebar">
+        <app-sidebar></app-sidebar>
+    </div>
+    <!-- Page Sidebar Ends-->
+    <div class="page-body">
+        <main [@fadeInAnimation]="getRouterOutletState(o)">
+            <router-outlet #o="outlet"></router-outlet>
+        </main>
+    </div>
+    <!-- footer start-->
+    <app-footer></app-footer>
+</div>
+
+

@@ -1,0 +1,24 @@
+.white {
+  color: #fff !important;
+}
+
+.social-icons li a {
+  color: #fff !important;
+  width: 50px;
+  font-size: 30px;
+}
+
+a, a:focus {
+  color: #fff !important;
+}
+
+
+
+.footer-section{
+  content: "";
+  position: absolute;
+  background-color: #f1f5f6;
+  width: 100%;
+  z-index: -1;
+}
+

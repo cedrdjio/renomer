@@ -1,0 +1,36 @@
+<div class="page-body" *ngIf="partner$| async as partner">
+    <app-breadcrumb [title]="'Points de Vente'" [items]="['Acceuil','Enseignes']" [active_item]="partner.label"></app-breadcrumb>
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="media">
+
+                            <div class="media-body text-end">
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <app-default-table [columns]="columns"
+                                           [page]="page"
+                                           [values]="datas"
+                                           [pageSize]="limit"
+                                           [isOnlyForRoot]="false"
+                                           (onPageChangeEvent)="onPageChange($event)"
+                        >
+
+                        </app-default-table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+
+</div>

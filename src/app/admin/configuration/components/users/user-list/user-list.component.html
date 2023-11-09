@@ -1,0 +1,203 @@
+<div class="page-body">
+  <app-breadcrumb [title]="'Administrateurs'" [items]="['Acceuil']" [active_item]="'Administrateurs'"></app-breadcrumb>
+
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+              <div class="media">
+                  <form [formGroup]="searchForm" class="form-inline" >
+                      <div class="form-group mb-0">
+                          <a
+                              [hidden]="isFilter"
+                              type="button"
+                              class="btn btn-info cursor-pointer me-1 mt-2 mb-2 "
+                              (click)="search(searchC)"
+                          >
+
+                              Rechercher
+
+                              <i class="fa fa-search"></i>
+                          </a>
+                          <a
+                              [hidden]="!isFilter"
+                              type="button"
+                              class="btn btn-info cursor-pointer me-1 mt-2 mb-2"
+                              (click)="reset()"
+                          >
+
+                              Reinitialiser
+
+                          </a>
+                      </div>
+                  </form>
+                  <div class="media-body text-end">
+
+                      <form class="d-inline-flex">
+                          <div class="btn btn-primary" (click)="openModal(addM)">Ajouter</div>
+                      </form>
+
+                  </div>
+              </div>
+
+          </div>
+          <div class="card-body">
+            <app-default-table [columns]="columns"
+                               [page]="page"
+                               [values]="datas"
+                               [pageSize]="limit"
+                               [editRef]="addM"
+                               [sendRef]="sendM"
+                               [hasDetails]="false"
+                               [isEditable]="true"
+                               [isSendLink]="true"
+                               [isOnlyForRoot]="true"
+                               (onSendLink)="openEditModal($event.ref, $event.content)"
+                               (onEdit)="openEditModal($event.ref, $event.content)"
+                               (onPageChangeEvent)="onPageChange($event)"
+                               (onHide)="activateOrDeactivate($event)"
+            >
+
+            </app-default-table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+
+</div>
+
+
+<ng-template #addM let-modal>
+    <div class="modal-header ">
+        <h5 *ngIf="!(mode ==='EDIT')" class="modal-title ">Ajouter un administrateur</h5>
+        <h5 *ngIf="(mode ==='EDIT')" class="modal-title " >Modifier l' administrateur</h5>
+
+        <button type="button " class="btn btn-light " data-dismiss="modal " (click)="hideModal() ">&times;
+        </button>
+    </div>
+    <div class="modal-body ">
+        <form [formGroup]="addForm" (ngSubmit)="add()">
+
+            <div class="form-group mb-3">
+                <label for="name">Nom(s) </label>
+                <input type="text" class="form-control" [ngClass]="{'is-invalid': submitted && addFormControls['name'].errors}" formControlName="firstname" id="name" placeholder="Entrer le(s) nom(s)">
+                <div *ngIf="submitted && addFormControls['firstname'].errors" class="invalid-feedback">
+                    <div *ngIf="addFormControls['firstname'].errors?.['required']">Champ Requis</div>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="name">Prénom(s) </label>
+                <input type="text" class="form-control" [ngClass]="{'is-invalid': submitted && addFormControls['surname'].errors}" formControlName="lastname" id="surname" placeholder="Entrer le(s) prénom(s)">
+                <div *ngIf="submitted && addFormControls['lastname'].errors" class="invalid-feedback">
+                    <div *ngIf="addFormControls['lastname'].errors?.['required']">Champ Requis</div>
+                </div>
+            </div>
+
+            <div class="form-group  mb-3">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Entrer l'adresse mail" [ngClass]="{'is-invalid': submitted && addFormControls['email'].errors}" formControlName="email">
+                <div *ngIf="submitted && addFormControls['email'].errors" class="invalid-feedback">
+                    <div *ngIf="addFormControls['email'].errors?.['required']">Champ Requis</div>
+                    <div *ngIf="addFormControls['email'].errors?.['email']"> L'adresse mail est invalide</div>
+                </div>
+            </div>
+
+            <div class="form-group mb-3 " [hidden]="mode === 'EDIT'">
+                <label for="role ">Rôle</label>
+                <select class="form-control " id="role" [ngClass]="{ 'is-invalid': submitted && addFormControls[ 'role'].errors} " formControlName="role">
+                    <option  selected  [ngValue]=" " > Choisissez un role </option>
+                    <option [hidden]="role === 'PARTNER_MANAGER' || role === 'CUSTOMER'" *ngFor="let role of roles" [ngValue]="role" >
+                        {{role}}
+                    </option>
+                </select>
+                <div *ngIf=" submitted && addFormControls['role'].errors " class="invalid-feedback ">
+                    <div *ngIf="addFormControls['role'].errors?.['required'] ">Champ Requis</div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer ">
+        <button type="submit" class="btn btn-primary" (click)="add()" [disabled]="addForm.invalid">
+            <ng-container *ngIf="!isLoading">
+                <span *ngIf="(mode ==='EDIT')" class="indicator-label">Modifier</span>
+                <span *ngIf="!(mode ==='EDIT')" class="indicator-label">Ajouter</span>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+
+        </button>
+    </div>
+</ng-template>
+
+
+
+
+<ng-template #sendM let-modal>
+    <div class="modal-header ">
+        <h5 class="modal-title ">Confirm...</h5>
+        <button type="button " class="btn btn-light" data-dismiss="modal" (click)="hideModal()">&times;</button>
+    </div>
+
+    <div class="modal-body ">
+        Voulez-vous renvoyer un lien d'activation cet administrateur?
+    </div>
+
+    <div class="modal-footer ">
+        <button type="button " class="btn btn-sm btn-outline-danger" (click)="hideModal()">Annuler</button>
+        <button type="button " class="btn btn-sm btn-outline-primary" data-dismiss="modal" (click)="reSendLink(user.email)">
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+            <ng-container *ngIf="!isLoading">
+                <span class="indicator-label">Envoyer</span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #searchC let-modal>
+    <div class="modal-header pb-10 pb-lg-8">
+        <div class="text-gray-400 fw-bold fs-6">
+            <span class="indicator-label">Rechercher un administrateur</span>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div
+            class="row g-3 needs-validation"
+            [formGroup]="searchForm">
+
+            <div class="col-md-6">
+                <label>
+                    Nom ou prenom de l'administrateur
+                </label>
+                <input class="form-control"
+                       placeholder=""  name="code" formControlName="term" type="text"/>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="reset" class="btn btn-sm btn-outline-danger" (click)="hideModal()">Annuler</button>
+        <button type="submit" class="btn btn-sm btn-outline-primary" [disabled]="searchForm.invalid">
+            <ng-container *ngIf="!isLoading">
+                <span  class="indicator-label" (click)="searchUser()">Rechercher</span>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>

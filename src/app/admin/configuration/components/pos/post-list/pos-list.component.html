@@ -1,0 +1,220 @@
+<div class="page-body">
+    <app-breadcrumb [title]="'Points de Vente'" [items]="['Acceuil']" [active_item]="'Points de Vente'"></app-breadcrumb>
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="media">
+                            <form [formGroup]="searchForm" class="form-inline" >
+                                <div class="form-group mb-0">
+                                    <a
+                                        [hidden]="isFilter"
+                                        type="button"
+                                        class="btn btn-info cursor-pointer me-1 mt-2 mb-2 "
+                                        (click)="search(searchPos)"
+                                    >
+
+                                        Rechercher
+
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                    <a
+                                        [hidden]="!isFilter"
+                                        type="button"
+                                        class="btn btn-info cursor-pointer me-1 mt-2 mb-2"
+                                        (click)="reset()"
+                                    >
+
+                                        Reinitialiser
+
+                                    </a>
+                                </div>
+                            </form>
+                            <div class="media-body text-end">
+                                <form class="d-inline-flex">
+                                    <div class="btn btn-primary" (click)="openModal(addM)">Ajouter</div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <app-default-table [columns]="columns"
+                                           [page]="page"
+                                           [values]="datas"
+                                           [pageSize]="limit"
+                                           [editRef]="addM"
+                                           [isEditable]="true"
+                                           [isOnlyForRoot]="true"
+                                           (onEdit)="openEditModal($event.ref, $event.content)"
+                                           (onPageChangeEvent)="onPageChange($event)"
+                                           (onHide)="activateOrDeactivate($event)"
+                        >
+
+                        </app-default-table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+
+</div>
+
+
+<ng-template #addM let-modal>
+    <div class="modal-header ">
+        <h5 *ngIf="!(mode ==='EDIT')" class="modal-title " id="exampleModalCenterTitle">Ajouter un point de vente</h5>
+        <h5 *ngIf="(mode ==='EDIT')" class="modal-title " id="exampleModalCenterTitle1">Modifier le point de vente</h5>
+        <button type="button " class="btn btn-light " data-dismiss="modal " (click)="hideModal() ">&times;
+        </button>
+    </div>
+    <div class="modal-body ">
+        <form [formGroup]="addForm">
+           <div class="row">
+               <div class="form-group mb-3 col-6">
+                   <label for="label">Nom du point de vente</label>
+                   <input type="text" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['label'].errors}" formControlName="name" id="label" placeholder="Entrer le nom du point de vente">
+                   <div *ngIf="submitted && addFormControls['name'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['name'].errors?.['required']">Champ Requis</div>
+                   </div>
+               </div>
+
+               <div class="form-group mb-3 col-6">
+                   <label for="label">Adresse du point de vente</label>
+                   <input type="text" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['address'].errors}" formControlName="address" id="address" placeholder="Entrer l'adresse du point de vente">
+                   <div *ngIf="submitted && addFormControls['address'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['address'].errors?.['required']">Champ Requis</div>
+                   </div>
+               </div>
+
+               <div class="form-group mb-3 col-6">
+                   <label for="label">Latitude</label>
+                   <input type="text" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['latitude'].errors}" formControlName="name" id="latitude" placeholder="Entrer la latitude du point de vente">
+                   <div *ngIf="submitted && addFormControls['latitude'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['latitude'].errors?.['required']">Champ Requis</div>
+                   </div>
+               </div>
+
+               <div class="form-group mb-3 col-6">
+                   <label for="label">Longitude</label>
+                   <input type="text" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['address'].errors}" formControlName="longitude" id="longitude" placeholder="Entrer la longitude du point de vente">
+                   <div *ngIf="submitted && addFormControls['longitude'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['longitude'].errors?.['required']">Champ Requis</div>
+                   </div>
+               </div>
+
+               <div class="form-group mb-3 col-6">
+                   <label for="label">Heure d'ouverture</label>
+                   <input type="time" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['openAt'].errors}" formControlName="openAt" id="openAt" >
+                   <div *ngIf="submitted && addFormControls['openAt'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['address'].errors?.['openAt']">Champ Requis</div>
+                   </div>
+               </div>
+
+               <div class="form-group mb-3 col-6">
+                   <label for="label">Heure de fermeture</label>
+                   <input type="time" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['closeAt'].errors}" formControlName="closeAt" id="closeAt">
+                   <div *ngIf="submitted && addFormControls['closeAt'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['closeAt'].errors?.['required']">Champ Requis</div>
+                   </div>
+               </div>
+
+               <div class="form-group mb-3 col-6" *ngIf="isAdmin" [hidden]="mode ==='EDIT'">
+                   <label>Partenaire </label>
+                   <input type="text" class="form-control" [ngClass]="{'is-invalid': submitted && addFormControls['partnerId'].errors}"  placeholder="Entrer le nom du partenaire" list="partners"  name="partnerId" value=""  formControlName="partnerId">
+                   <datalist id="partners"  *ngIf="partners$ | async as partners">
+                       <option *ngFor="let partner of partners" [value]="partner.id">{{partner.label}}</option>
+                   </datalist>
+
+                   <div *ngIf="submitted && addFormControls['partnerId'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['partnerId'].errors?.['partnerId']">Champ Requis</div>
+                   </div>
+               </div>
+
+               <div class="form-group mb-3 col-6" *ngIf="countries$ | async as countries" [hidden]="mode ==='EDIT'">
+                   <label>Pays </label>
+                   <input type="text" class="form-control" (change)="onChange($event)" [ngClass]="{'is-invalid': submitted && addFormControls['countryId'].errors}"  placeholder="Entrer le nom du pays" list="pays"  name="countryId" value=""  formControlName="countryId">
+                   <datalist id="pays"  *ngIf="countries$ | async as countries">
+                       <option *ngFor="let country of countries" [value]="country.id">{{country.name}}</option>
+                   </datalist>
+
+                   <div *ngIf="submitted && addFormControls['countryId'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['countryId'].errors?.['partnerId']">Champ Requis</div>
+                   </div>
+               </div>
+
+
+               <div class="form-group mb-3 col-6" *ngIf="towns$ | async as towns" [hidden]="mode ==='EDIT'">
+                   <label>Ville </label>
+                   <input type="text" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['townId'].errors}" placeholder="Entrer le nom de la ville"  list="tows"  name="townId" value=""  formControlName="townId">
+                   <datalist id="tows"  *ngIf="towns$ | async as towns">
+                       <option *ngFor="let town of towns" [value]="town.id">{{town.name}}</option>
+                   </datalist>
+
+                   <div *ngIf="submitted && addFormControls['townId'].errors" class="invalid-feedback">
+                       <div *ngIf="addFormControls['townId'].errors?.['townId']">Champ Requis</div>
+                   </div>
+               </div>
+           </div>
+
+        </form>
+    </div>
+    <div class="modal-footer ">
+        <button type="button" class="btn btn-primary" (click)="add()" [disabled]="addForm.invalid && mode ==='CREATE'" >
+            <ng-container *ngIf="!isLoading">
+                <span *ngIf="(mode ==='EDIT')" class="indicator-label">Modifier</span>
+                <span *ngIf="!(mode ==='EDIT')" class="indicator-label">Ajouter</span>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+
+        </button>
+    </div>
+</ng-template>
+
+
+<ng-template #searchPos let-modal>
+    <div class="modal-header pb-10 pb-lg-8">
+        <div class="text-gray-400 fw-bold fs-6">
+            <span class="indicator-label">Rechercher un point de vente</span>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div
+            class="row g-3 needs-validation"
+            [formGroup]="searchForm">
+
+            <div class="col-md-6">
+                <label>
+                    Nom ou code du point de vente
+                </label>
+                <input class="form-control"
+                       placeholder=""  name="code" formControlName="term" type="text"/>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="reset" class="btn btn-sm btn-outline-danger" (click)="hideModal()">Annuler</button>
+        <button type="submit" class="btn btn-sm btn-outline-primary" [disabled]="searchForm.invalid">
+            <ng-container *ngIf="!isLoading">
+                <span  class="indicator-label" (click)="searchP()">Rechercher</span>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>
+
+

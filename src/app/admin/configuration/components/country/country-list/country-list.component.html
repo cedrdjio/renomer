@@ -1,0 +1,102 @@
+
+<div class="page-body">
+  <app-breadcrumb [title]="'Pays'" [items]="['Acceuil']" [active_item]="'Pays'"></app-breadcrumb>
+
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+              <div class="media ">
+
+                  <div class="media-body align-items-center">
+                      <form [formGroup]="searchForm" class="form-inline" >
+                          <div class="form-group mb-0">
+                              <a
+                                  [hidden]="isFilter"
+                                  type="button"
+                                  class="btn btn-info btn-sm cursor-pointer me-1 mt-2 mb-2 "
+                                  (click)="search(searchC)"
+                              >
+
+                                  Rechercher
+
+                                  <i class="fa fa-search"></i>
+                              </a>
+                              <a
+                                  [hidden]="!isFilter"
+                                  type="button"
+                                  class="btn btn-info btn-sm cursor-pointer me-1 mt-2 mb-2"
+                                  (click)="reset()"
+                              >
+
+                                  Reinitialiser
+
+                              </a>
+                          </div>
+                      </form>
+
+                  </div>
+              </div>
+          </div>
+          <div class="card-body">
+            <app-default-table [columns]="columns"
+                               [page]="page"
+                               [values]="datas"
+                               [pageSize]="limit"
+                               [isDeletable]="false"
+                               [hasDetails]="false"
+                               [isEditable]="false"
+                               (onPageChangeEvent)="onPageChange($event)"
+                              >
+
+            </app-default-table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+
+</div>
+
+
+<ng-template #searchC let-modal>
+    <div class="modal-header pb-10 pb-lg-8">
+        <div class="text-gray-400 fw-bold fs-6">
+            <span class="indicator-label">Rechercher un pays</span>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div
+             class="row g-3 needs-validation"
+             [formGroup]="searchForm">
+
+            <div class="col-md-6">
+                <label>
+                    Nom du pays
+                </label>
+                <input class="form-control"
+                       placeholder="Entrer le nom ou code du pays"  name="code" formControlName="term" type="text"/>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button color="danger" type="reset" class="btn btn-sm btn-outline-danger" (click)="hideModal()">Annuler</button>
+        <button type="submit" class="btn btn-sm btn-outline-primary"  id="kt_sign_in_submit" color="primary" [disabled]="searchForm.invalid">
+            <ng-container *ngIf="!isLoading">
+                <span  class="indicator-label" (click)="searchCountry()">Rechercher</span>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                                         <span clas="indicator-progress" [style.display]="'block'">
+                                              Patientez s'il vous plait...{{ " " }}
+                                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>
+
+

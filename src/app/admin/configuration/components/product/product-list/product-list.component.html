@@ -1,0 +1,359 @@
+<div class="page-body">
+    <app-breadcrumb
+        [title]="'Produits'"
+        [items]="['Acceuil']"
+        [active_item]="'produits'"
+    ></app-breadcrumb>
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="media">
+                            <form [formGroup]="searchForm" class="form-inline">
+                                <div class="form-group mb-0">
+                                    <a
+                                        [hidden]="isFilter"
+                                        type="button"
+                                        class="btn btn-info btn-sm cursor-pointer me-1 mt-2 mb-2"
+                                        (click)="search(searchC)"
+                                    >
+                                        Rechercher
+
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                    <a
+                                        [hidden]="!isFilter"
+                                        type="button"
+                                        class="btn btn-info btn-sm cursor-pointer me-1 mt-2 mb-2"
+                                        (click)="reset()"
+                                    >
+                                        Reinitialiser
+                                    </a>
+                                </div>
+                            </form>
+                            <div class="media-body text-end">
+                                <form class="d-inline-flex">
+                                    <div
+                                        class="btn btn-primary"
+                                        (click)="openModal(addM)"
+                                    >
+                                        Ajouter
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <app-default-table
+                            [columns]="columns"
+                            [page]="page"
+                            [values]="datas"
+                            [pageSize]="limit"
+                            [editRef]="addM"
+                            [hasDetails]="true"
+                            [hasPos]="true"
+                            [isSendLink]="true"
+                            [isDeletable]="false"
+                            [isOnlyForRoot]="true"
+                            (onEdit)="openEditModal($event.ref, $event.content)"
+                            (onPageChangeEvent)="onPageChange($event)"
+                            (onHide)="activateOrDeactivate($event)"
+                            (onShowDetails)="showDetails($event)"
+                            (onShowPos)="showPos($event)"
+                        >
+                        </app-default-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+</div>
+
+<ng-template #addM let-modal>
+    <div class="modal-header">
+        <h5
+            *ngIf="!(mode === 'EDIT')"
+            class="modal-title"
+            id="exampleModalCenterTitle "
+        >
+            Ajouter un produit
+        </h5>
+        <h5
+            *ngIf="mode === 'EDIT'"
+            class="modal-title"
+            id="exampleModalCenterTitle2 "
+        >
+            Modifier un produit
+        </h5>
+        <button
+            type="button "
+            class="btn btn-light"
+            data-dismiss="modal "
+            (click)="hideModal()"
+        >
+            &times;
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form [formGroup]="addForm">
+            <div class="row">
+                <div class="form-group mb-3 col-6">
+                    <label for="label">Nom du produit</label>
+                    <input type="text" class="form-control"
+                        [ngClass]="{
+                            'is-invalid': submitted && addFormControls['label'].errors
+                        }"
+                        formControlName="name" id="label" placeholder="Entrer le nom du produit"
+                    />
+                    <div *ngIf="submitted && addFormControls['name'].errors" class="invalid-feedback">
+                        <div *ngIf="addFormControls['name'].errors?.['required']">
+                            Champ Requis
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3 col-6">
+                    <label for="label">Description</label>
+                    <textarea type="text" class="form-control"
+                        [ngClass]="{
+                            'is-invalid': submitted && addFormControls['label'].errors
+                        }"
+                        formControlName="description"
+                    >Entrer le nom du produit</textarea>
+                </div>
+
+                <!-- <div class="form-group mb-3 col-6">
+                    <label for="label">Marque du produit</label>
+                    <input type="text" class="form-control"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && addFormControls['brand'].errors
+                        }"
+                        formControlName="brand" id="brand" placeholder="Entrer la marque du produit"
+                    />
+                    <div *ngIf="submitted && addFormControls['brand'].errors" class="invalid-feedback">
+                        <div *ngIf="addFormControls['brand'].errors?.['required']">
+                            Champ Requis
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="form-group mb-3 col-6">
+                    <label for="label">Prix du produit</label>
+                    <input type="number" class="form-control"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && addFormControls['price'].errors
+                        }"
+                        formControlName="price" id="price" placeholder="Entrer le prix du produit"
+                    />
+                    <div *ngIf="submitted && addFormControls['price'].errors" class="invalid-feedback">
+                        <div *ngIf="addFormControls['price'].errors?.['required']">
+                            Champ Requis
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 col-6">
+                    <label for="label">Taux de Réduction</label>
+                    <input type="number" class="form-control"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && addFormControls['address'].errors
+                        }"
+                        formControlName="reductionRate" id="reductionRate" placeholder="Entrer le taux de réduction"
+                    />
+                    <div *ngIf="submitted && addFormControls['reductionRate'].errors" class="invalid-feedback">
+                        <div *ngIf="addFormControls['reductionRate'].errors?.['required']">
+                            Champ Requis
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3 col-6">
+                    <label for="image">image</label>
+                    <input type="file" class="form-control"
+                        formControlName="image"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && addFormControls['image'].errors
+                        }"
+                        id="image"placeholder="Entrer la image"
+                    />
+                    <div *ngIf="addForm.controls.image.touched && addFormControls['image'].errors" class="invalid-feedback">
+                        <div  *ngIf="addFormControls['image'].errors?.['required']">
+                            Champ Requis
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 col-6">
+                    <label for="category">Categorie</label>
+                    <select class="form-control" formControlName="category">
+                        <option></option>
+                        <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+                    </select>
+                    <div *ngIf="addForm.controls.category.touched && addFormControls['category'].errors" class="invalid-feedback">
+                        <div *ngIf="addFormControls['category'].errors?.['required']">
+                            Champ Requis
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3 col-6">
+                    <label for="category">Point de vente</label>
+                    <select class="form-control" formControlName="pos">
+                        <option></option>
+                        <option *ngFor="let p of pos" [value]="p.id">{{p.name}}</option>
+                    </select>
+                    <div *ngIf="addForm.controls.pos.touched && addFormControls['pos'].errors" class="invalid-feedback">
+                        <div *ngIf="addFormControls['pos'].errors?.['required']">
+                            Champ Requis
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 col-6">
+                    <label for="label">Quantité</label>
+                    <input type="number" class="form-control"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && addFormControls['quantity'].errors
+                        }"
+                        formControlName="quantity" id="quantity" placeholder="Entrer la quantité"
+                    />
+                    <div *ngIf="submitted && addFormControls['quantity'].errors" class="invalid-feedback">
+                        <div *ngIf="addFormControls['quantity'].errors?.['required']">
+                            Champ Requis
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button
+            type="button"
+            class="btn btn-primary"
+            (click)="add()"
+            [disabled]="addForm.invalid"
+        >
+            <ng-container *ngIf="!isLoading">
+                <span *ngIf="mode === 'EDIT'" class="indicator-label"
+                    >Modifier</span
+                >
+                <span *ngIf="!(mode === 'EDIT')" class="indicator-label"
+                    >Ajouter</span
+                >
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                <span clas="indicator-progress" [style.display]="'block'">
+                    Patientez s'il vous plait...{{ " " }}
+                    <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                    ></span
+                ></span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #searchC let-modal>
+    <div class="modal-header pb-10 pb-lg-8">
+        <div class="text-gray-400 fw-bold fs-6">
+            <span class="indicator-label">Rechercher un produit</span>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="row g-3 needs-validation" [formGroup]="searchForm">
+            <div class="col-md-6">
+                <label> Nom du produit </label>
+                <input
+                    class="form-control"
+                    placeholder="Entrer le nom du produit"
+                    name="code"
+                    formControlName="term"
+                    type="text"
+                />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button
+            color="danger"
+            type="reset"
+            class="btn btn-sm btn-outline-danger"
+            (click)="hideModal()"
+        >
+            Annuler
+        </button>
+        <button
+            type="submit"
+            class="btn btn-sm btn-outline-primary"
+            id="kt_sign_in_submit"
+            color="primary"
+        >
+            <ng-container *ngIf="!isLoading">
+                <span class="indicator-label" (click)="searchProduct()"
+                    >Rechercher</span
+                >
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                <span clas="indicator-progress" [style.display]="'block'">
+                    Patientez s'il vous plait...{{ " " }}
+                    <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                    ></span
+                ></span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #deleteM let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Confirm...</h5>
+        <button
+            type="button"
+            class="btn btn-light"
+            data-dismiss="modal "
+            (click)="hideModal()"
+        >
+            &times;
+        </button>
+    </div>
+
+    <div class="modal-body">
+        Voulez-vous vraiment modifier le status de ce produit?
+    </div>
+
+    <div class="modal-footer">
+        <button
+            type="button"
+            class="btn btn-sm btn-outline-danger"
+            (click)="hideModal()"
+        >
+            Annuler
+        </button>
+        <button
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            data-dismiss="modal"
+            (click)="activateOrDeactivate(product.id)"
+        >
+            <ng-container *ngIf="isLoading">
+                <span clas="indicator-progress" [style.display]="'block'">
+                    Patientez s'il vous plait...{{ " " }}
+                    <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                    ></span
+                ></span>
+            </ng-container>
+            <ng-container *ngIf="!isLoading">
+                <span class="indicator-label">Confirmer</span>
+            </ng-container>
+        </button>
+    </div>
+</ng-template>
