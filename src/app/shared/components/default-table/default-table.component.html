@@ -139,11 +139,10 @@
                 ></span>
                 <span
                   style="color: green"
-                  *ngIf="item.status === userStatus.BLOCKED  || item.status === generalStatus.BLOCKED || item.status === userStatus.BLOCKED || item.status === generalStatus.DISABLED || item.status === generalStatus.DEACTIVATED"
+                  *ngIf="item.status === userStatus.BLOCKED || item.status === generalStatus.DISABLED || item.status === generalStatus.DEACTIVATED"
                   [inlineSVG]="'./assets/images/icons/duotune/general/gen037.svg'"
                   class="svg-icon svg-icon-3"
                 ></span>
-
               </a>
 
               <a

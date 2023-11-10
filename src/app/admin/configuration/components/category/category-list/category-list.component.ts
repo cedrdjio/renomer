@@ -108,6 +108,8 @@ export class CategoryListComponent
     override openModal(content: any) {
         this.mode = 'SAVE';
         this.categoryId = null;
+        this.invalidCode = false;
+        this.invalidName = false;
         this.sameName = false;
         this.modalService.open(content, { centered: true });
         this.addForm.reset();
@@ -116,6 +118,8 @@ export class CategoryListComponent
     override openEditModal(content: any, item: any) {
         this.mode = 'EDIT';
         this.categoryId = item.id;
+        this.invalidCode = false;
+        this.invalidName = false;
         this.category$ = this.categoryService
             .getById(this.categoryId)
             .pipe(map((response) => response.data));
@@ -139,7 +143,9 @@ export class CategoryListComponent
         );
     }
 
-    search(content: any): void {
+    search(content: any): void {        
+        this.invalidCode = false;
+        this.invalidName = false;
         this.modalService.open(content, { centered: true, size: 'lg' });
     }
 
@@ -153,16 +159,22 @@ export class CategoryListComponent
 
         const term: string = this.searchForm.get('term')?.value;
 
-        if (term) {
+        if (term != null && term != "") {
+            console.log('valide');
             this.hideModal();
             this.searchForm.reset();
             const categorys$ = this.categoryService.getAllPaginated(term, this.page, this.limit);
             this.datas =this.loaderService.showLoaderUntilCompleted<ApiResponsePage<Category>>(categorys$);
+        } else {
+            console.log("Nom invalide")
+            this.invalidName = true;
         }
     }
 
     reset() {
-        this.isFilter = false;
+        this.isFilter = false;        
+        this.invalidCode = false;
+        this.invalidName = false;
         const categorys$ = this.categoryService.getAllPaginated(this.term, this.page, this.limit);
         this.datas = this.loaderService.showLoaderUntilCompleted<ApiResponsePage<Category>>(categorys$);
         this.searchForm.reset();
@@ -190,32 +202,38 @@ export class CategoryListComponent
             t.name = this.addForm.get('name')?.value;
             if (this.categoryId) {
                 t.id = this.categoryId;
-                console.log(t)
-                this.categoryService.edit(this.categoryId, t).subscribe({
-                    next: () => {
-                        this.toast.success(
-                            `Catégorie modifié avec succès`,
-                            `Enseigne`,
-                            {
-                                timeOut: 5000,
-                            }
-                        );
-                    },
-                    error: (err) => {
-                        this.hideModal();
-                        this.toast.error(
-                            `Veuillez contacter votre administrateur`,
-                            `Une erreur est survenue`,
-                            {
-                                timeOut: 5000,
-                            }
-                        );
-                    },
-                    complete: () => {
-                        this.hideModal();
-                        this.getDatas();
-                    },
-                });
+                this.categoryService.getAllPaginated(t.name, 0, 25).subscribe(
+                    (result) => {
+                        if (result.datas.length != 0) {
+                            this.sameName = true;
+                        } else {
+                            this.categoryService.edit(this.categoryId, t).subscribe({
+                                next: () => {
+                                    this.toast.success(
+                                        `Catégorie modifié avec succès`,
+                                        `Enseigne`,
+                                        {
+                                            timeOut: 5000,
+                                        }
+                                    );
+                                },
+                                error: (err) => {
+                                    this.hideModal();
+                                    this.toast.error(
+                                        `Veuillez contacter votre administrateur`,
+                                        `Une erreur est survenue`,
+                                        {
+                                            timeOut: 5000,
+                                        }
+                                    );
+                                },
+                                complete: () => {
+                                    this.hideModal();
+                                    this.getDatas();
+                                },
+                            });
+                        }
+                    })
             } else {
                 this.categoryService.getAllPaginated(t.name, 0, 25).subscribe(
                     (result) => {

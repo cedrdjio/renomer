@@ -62,11 +62,7 @@ const routes: Routes = [
       },
       {
         path: 'Commandes',
-        component: OrderComponent,
-      },
-      {
-        path: 'produits',
-        component: ProductComponent,
+        component:OrderComponent,
       },
       {
             path: 'clients',

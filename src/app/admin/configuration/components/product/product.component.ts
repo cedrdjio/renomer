@@ -21,11 +21,11 @@ export class ProductComponent extends AbstractComponent<Product> implements OnIn
     }
 
     ngOnInit(): void {
-        this.reloadProduits();
+        this.reloadClients();
     }
 
 
-    reloadProduits() {
+    reloadClients() {
         const product$ = this.productService.getAllPaginated(this.term, this.page, this.limit);
         this.product$ = this.loaderService.showLoaderUntilCompleted<ApiResponsePage<Product>>(product$);
     }

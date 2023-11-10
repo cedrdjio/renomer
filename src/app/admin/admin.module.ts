@@ -56,7 +56,8 @@ import { OrderListComponent } from './configuration/components/order/order-list/
       ProductComponent,
       ProductListComponent,
       OrderComponent,
-      OrderListComponent
+      OrderListComponent,
+
 
 
   ],
