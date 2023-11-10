@@ -144,7 +144,27 @@
                   class="svg-icon svg-icon-3"
                 ></span>
 
-                </a>
+              </a>
+              
+              <a
+                title="Activer/Bloquer"
+                style="margin-right: 5%"
+                *ngIf="isBlockable"
+                (click)="hideOrShow(item[idRef])"
+                >
+                <span
+                  style="color: red"
+                  *ngIf="item.status === generalStatus.ACTIVE || item.status === userStatus.ACTIVE "
+                  [inlineSVG]="'./assets/images/icons/duotune/general/gen040.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+                <span
+                  style="color: green"
+                  *ngIf="item.status === userStatus.BLOCKED  || item.status === generalStatus.BLOCKED || item.status === userStatus.BLOCKED || item.status === generalStatus.DISABLED || item.status === generalStatus.DEACTIVATED"
+                  [inlineSVG]="'./assets/images/icons/duotune/general/gen037.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+              </a>
 
               <a
                 title="Supprimer"

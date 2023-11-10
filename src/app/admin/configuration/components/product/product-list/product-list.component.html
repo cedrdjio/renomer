@@ -58,6 +58,7 @@
                             [isSendLink]="true"
                             [isDeletable]="false"
                             [isOnlyForRoot]="true"
+                            [isBlockable]="true"
                             (onEdit)="openEditModal($event.ref, $event.content)"
                             (onPageChangeEvent)="onPageChange($event)"
                             (onHide)="activateOrDeactivate($event)"
@@ -103,44 +104,31 @@
         <form [formGroup]="addForm">
             <div class="row">
                 <div class="form-group mb-3 col-6">
-                    <label for="label">Nom du produit</label>
+                    <label for="name">Nom du produit</label>
                     <input type="text" class="form-control"
                         [ngClass]="{
-                            'is-invalid': submitted && addFormControls['label'].errors
+                            'is-invalid': submitted && addFormControls['name'].errors
                         }"
-                        formControlName="name" id="label" placeholder="Entrer le nom du produit"
+                        formControlName="name" id="name" placeholder="Entrer le nom du produit"
                     />
-                    <div *ngIf="submitted && addFormControls['name'].errors" class="invalid-feedback">
+                    <div *ngIf="submitted && addFormControls['name'].errors" class="text-danger font-weight-bold">
                         <div *ngIf="addFormControls['name'].errors?.['required']">
-                            Champ Requis
+                            Echec, veuillez renseigner le nom du produit
                         </div>
+                    </div>
+                    <div *ngIf="sameName">
+                        <div class="text-danger font-weight-bold">Échec, nom du produit déjà utilisé.</div>
                     </div>
                 </div>
                 <div class="form-group mb-3 col-6">
                     <label for="label">Description</label>
                     <textarea type="text" class="form-control"
                         [ngClass]="{
-                            'is-invalid': submitted && addFormControls['label'].errors
+                            'is-invalid': submitted && addFormControls['description'].errors
                         }"
                         formControlName="description"
-                    >Entrer le nom du produit</textarea>
+                    ></textarea>
                 </div>
-
-                <!-- <div class="form-group mb-3 col-6">
-                    <label for="label">Marque du produit</label>
-                    <input type="text" class="form-control"
-                        [ngClass]="{
-                            'is-invalid':
-                                submitted && addFormControls['brand'].errors
-                        }"
-                        formControlName="brand" id="brand" placeholder="Entrer la marque du produit"
-                    />
-                    <div *ngIf="submitted && addFormControls['brand'].errors" class="invalid-feedback">
-                        <div *ngIf="addFormControls['brand'].errors?.['required']">
-                            Champ Requis
-                        </div>
-                    </div>
-                </div> -->
 
                 <div class="form-group mb-3 col-6">
                     <label for="label">Prix du produit</label>
@@ -151,9 +139,9 @@
                         }"
                         formControlName="price" id="price" placeholder="Entrer le prix du produit"
                     />
-                    <div *ngIf="submitted && addFormControls['price'].errors" class="invalid-feedback">
+                    <div *ngIf="submitted && addFormControls['price'].errors" class="text-danger font-weight-bold">
                         <div *ngIf="addFormControls['price'].errors?.['required']">
-                            Champ Requis
+                            Echec, veuillez renseigner le prix du produit
                         </div>
                     </div>
                 </div>
@@ -163,13 +151,13 @@
                     <input type="number" class="form-control"
                         [ngClass]="{
                             'is-invalid':
-                                submitted && addFormControls['address'].errors
+                                submitted && addFormControls['reductionRate'].errors
                         }"
                         formControlName="reductionRate" id="reductionRate" placeholder="Entrer le taux de réduction"
                     />
-                    <div *ngIf="submitted && addFormControls['reductionRate'].errors" class="invalid-feedback">
+                    <div *ngIf="submitted && addFormControls['reductionRate'].errors" class="text-danger font-weight-bold">
                         <div *ngIf="addFormControls['reductionRate'].errors?.['required']">
-                            Champ Requis
+                            Echec, veuillez renseigner le taux de réduction
                         </div>
                     </div>
                 </div>
@@ -183,9 +171,9 @@
                         }"
                         id="image"placeholder="Entrer la image"
                     />
-                    <div *ngIf="addForm.controls.image.touched && addFormControls['image'].errors" class="invalid-feedback">
+                    <div *ngIf="submitted && addFormControls['image'].errors" class="text-danger font-weight-bold">
                         <div  *ngIf="addFormControls['image'].errors?.['required']">
-                            Champ Requis
+                            Echec, veuillez insérer une image
                         </div>
                     </div>
                 </div>
@@ -196,9 +184,9 @@
                         <option></option>
                         <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
                     </select>
-                    <div *ngIf="addForm.controls.category.touched && addFormControls['category'].errors" class="invalid-feedback">
+                    <div *ngIf="submitted && addFormControls['category'].errors" class="text-danger font-weight-bold">
                         <div *ngIf="addFormControls['category'].errors?.['required']">
-                            Champ Requis
+                            Echec, veuillez renseigner la catégorie du produit
                         </div>
                     </div>
                 </div>
@@ -208,9 +196,9 @@
                         <option></option>
                         <option *ngFor="let p of pos" [value]="p.id">{{p.name}}</option>
                     </select>
-                    <div *ngIf="addForm.controls.pos.touched && addFormControls['pos'].errors" class="invalid-feedback">
+                    <div *ngIf="submitted && addFormControls['pos'].errors" class="text-danger font-weight-bold">
                         <div *ngIf="addFormControls['pos'].errors?.['required']">
-                            Champ Requis
+                            Echec, veuillez renseigner le point de vente
                         </div>
                     </div>
                 </div>
@@ -224,9 +212,9 @@
                         }"
                         formControlName="quantity" id="quantity" placeholder="Entrer la quantité"
                     />
-                    <div *ngIf="submitted && addFormControls['quantity'].errors" class="invalid-feedback">
+                    <div *ngIf="submitted && addFormControls['quantity'].errors" class="text-danger font-weight-bold">
                         <div *ngIf="addFormControls['quantity'].errors?.['required']">
-                            Champ Requis
+                            Echec, veuillez renseigner la quantité de produit
                         </div>
                     </div>
                 </div>
@@ -238,7 +226,6 @@
             type="button"
             class="btn btn-primary"
             (click)="add()"
-            [disabled]="addForm.invalid"
         >
             <ng-container *ngIf="!isLoading">
                 <span *ngIf="mode === 'EDIT'" class="indicator-label"
