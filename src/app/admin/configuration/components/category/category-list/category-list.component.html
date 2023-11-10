@@ -48,7 +48,7 @@
                                            [values]="datas"
                                            [pageSize]="limit"
                                            [editRef]="addM"
-                                           [hasDetails]="true"
+                                           [hasDetails]="false"
                                            [hasPos]="true"
                                            [isSendLink]="true"
                                            [isDeletable]="false"
@@ -85,17 +85,17 @@
                 <label for="code">Code de la categorie</label>
                 <input type="text" [disabled]="(mode ==='EDIT')" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['code'].errors}" formControlName="code" id="code" placeholder="Entrer le titre de la catégorie">
                 <div *ngIf="invalidCode" class="text-danger font-weight-bold">
-                    Champ Requis
+                    Veuillez entrer le code de la catégorie
                 </div>
             </div>
             <div class="form-group mb-3">
                 <label for="name">Nom de la categorie</label>
                 <input type="text" class="form-control"  [ngClass]="{'is-invalid': submitted && addFormControls['name'].errors}" formControlName="name" id="name" placeholder="Entrer le titre de la catégorie">
                 <div *ngIf="sameName">
-                    <div class="text-danger font-weight-bold">Échec, titre de la catégorie déjà utilisé.</div>
+                    <div class="text-danger font-weight-bold">Échec, nom de la catégorie déjà utilisé.</div>
                 </div>
                 <div *ngIf="invalidName" class="text-danger font-weight-bold">
-                    Champ Requis
+                    Veuillez entrer nom de la categorie
                 </div>
             </div>
         </form>
@@ -133,8 +133,10 @@
                 <label>
                     Nom de la catégorie
                 </label>
-                <input class="form-control"
-                       placeholder="Entrer le nom de la catégorie"  name="code" formControlName="term" type="text"/>
+                <input class="form-control" placeholder="Entrer le nom de la catégorie"  name="code" formControlName="term" type="text"/>
+                <div *ngIf="invalidName"class="text-danger font-weight-bold mt-2">
+                    Veuillez renseigner le nom de la categorie
+                </div>
             </div>
 
         </div>
