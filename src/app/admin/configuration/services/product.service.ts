@@ -11,8 +11,8 @@ import { productImages } from '../models/productImages';
     providedIn: 'root',
 })
 export class ProductService extends BaseService<Product> {
-  base_url = environment.baseUrl;
-  
+    base_url = environment.baseUrl;
+
 
     constructor(http: HttpClient) {
         super(http);
@@ -24,9 +24,16 @@ export class ProductService extends BaseService<Product> {
     override create(t: Product): Observable<ApiResponse<Product>> {
         return this.http.post<ApiResponse<Product>>(this.base_url + this.getUri(), t);
     }
-  
+
     addProductImage(productId: string, imageData: string): Observable<ApiResponse<productImages>> {
         return this.http.post<ApiResponse<productImages>>(`${this.base_url}/images?idProduct=${productId}`, imageData);
-    }
+    }
+    publishProduct(productId: string): Observable<ApiResponse<any>> {
+        return this.http.patch<ApiResponse<any>>(`${this.base_url}/${this.getUri()}/${productId}/publish`, {});
+    }
+
+    unpublishProduct(productId: string): Observable<ApiResponse<any>> {
+        return this.http.patch<ApiResponse<any>>(`${this.base_url}/${this.getUri()}/${productId}/unpublished`, {});
+    }
 }
 
