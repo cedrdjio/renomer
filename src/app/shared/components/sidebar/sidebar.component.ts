@@ -174,15 +174,7 @@ export class SidebarComponent extends AbstractComponent<any> implements OnInit {
                             active: false,
                         },
                         {
-                            path: '#',
-                            title: 'Produits',
-                            icon: 'shopping-bag',
-                            type: 'link',
-                            bookmark: true,
-                            active: false,
-                        },
-                        {
-                            path: '#',
+                            path: '/admin/categories',
                             title: 'Catégories',
                             icon: 'cast',
                             type: 'link',
@@ -190,7 +182,15 @@ export class SidebarComponent extends AbstractComponent<any> implements OnInit {
                             active: false,
                         },
                         {
-                            path: '#',
+                            path: '/admin/produits',
+                            title: 'Produits',
+                            icon: 'shopping-bag',
+                            type: 'link',
+                            bookmark: true,
+                            active: false,
+                        },
+                        {
+                            path: 'Commandes',
                             title: 'Commandes',
                             icon: 'shopping-cart',
                             type: 'link',

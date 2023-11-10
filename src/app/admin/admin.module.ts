@@ -28,6 +28,8 @@ import { CategoryComponent } from './configuration/components/category/category.
 import { CategoryListComponent } from './configuration/components/category/category-list/category-list.component';
 import { ProductComponent } from './configuration/components/product/product.component';
 import { ProductListComponent } from './configuration/components/product/product-list/product-list.component';
+import { OrderComponent } from './configuration/components/order/order.component';
+import { OrderListComponent } from './configuration/components/order/order-list/order-list.component';
 
 
 
@@ -52,7 +54,10 @@ import { ProductListComponent } from './configuration/components/product/product
       CategoryComponent,
       CategoryListComponent,
       ProductComponent,
-      ProductListComponent
+      ProductListComponent,
+      OrderComponent,
+      OrderListComponent,
+
 
 
   ],

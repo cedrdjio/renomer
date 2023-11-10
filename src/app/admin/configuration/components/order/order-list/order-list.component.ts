@@ -34,7 +34,7 @@ export class OrderListComponent extends AbstractComponent<Order>
     datas: Observable<ApiResponsePage<Order>>;
 
     columns = [
-        { name: 'Reference', propertyName: 'Reference' },
+        { name: 'Reference', propertyName: 'reference' },
         { name: 'Nombre de produit ', propertyName: 'nbProduct' },
     ];
 

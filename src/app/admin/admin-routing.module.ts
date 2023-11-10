@@ -12,6 +12,7 @@ import {PartnerUserComponent} from "./configuration/components/partner/partner-u
 import {PartnerPosComponent} from "./configuration/components/partner/partner-pos/partner-pos.component";
 import { CategoryComponent } from './configuration/components/category/category.component';
 import { ProductComponent } from './configuration/components/product/product.component';
+import { OrderComponent } from './configuration/components/order/order.component';
 
 
 
@@ -58,6 +59,10 @@ const routes: Routes = [
       {
         path: 'produits',
         component: ProductComponent,
+      },
+      {
+        path: 'Commandes',
+        component:OrderComponent,
       },
       {
             path: 'clients',
