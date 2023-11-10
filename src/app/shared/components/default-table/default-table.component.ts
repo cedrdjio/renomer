@@ -22,6 +22,7 @@ export class DefaultTableComponent implements OnInit {
     @Input() isSendLink = false;
     @Input() isOnlyForRoot = false;
     @Input() isBlockable = false;
+    @Input() isProduct = false;
     @Input() page = 1;
     @Input() pageSize = 10;
     @Input() editRef!: any;
@@ -85,7 +86,7 @@ export class DefaultTableComponent implements OnInit {
             this.hasDetails ||
             this.isSendLink ||
           this.isOnlyForRoot ||
-            this.isBlockable;
+            this.isBlockable||this.isProduct;
     }
 
     /**

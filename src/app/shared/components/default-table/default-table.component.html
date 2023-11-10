@@ -164,6 +164,23 @@
                   class="svg-icon svg-icon-3"
                 ></span>
               </a>
+              <a
+              title="publish/unpublish"
+              style="margin-right: 5%"
+              *ngIf="isProduct"
+              (click)="hideOrShow(item[idRef])"
+              >
+              <span
+                style="color: red"
+                [inlineSVG]="'./assets/images/icons/duotune/general/gen040.svg'"
+                class="svg-icon svg-icon-3"
+              ></span>
+              <span
+                style="color: green"
+                [inlineSVG]="'./assets/images/icons/duotune/general/gen037.svg'"
+                class="svg-icon svg-icon-3"
+              ></span>
+            </a>
 
               <a
                 title="Supprimer"
