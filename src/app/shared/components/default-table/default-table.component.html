@@ -144,7 +144,7 @@
                   class="svg-icon svg-icon-3"
                 ></span>
 
-                </a>
+              </a>
 
               <a
                 title="Supprimer"
@@ -168,6 +168,24 @@
                 [inlineSVG]="'./assets/images/icons/duotune/general/gen022.svg'"
                 class="svg-icon svg-icon-3"
               ></span></a>
+
+              
+              <a
+                title="Activer/Bloquer"
+                style="margin-right: 5%"
+                *ngIf="isBlockable"
+                >
+                <span
+                  style="color: red"
+                  *ngIf="true "
+                  class="svg-icon svg-icon-3"
+                ><button (click)="block(item)" class="btn btn-danger">DCTV</button></span>
+                <span
+                  style="color: green"
+                  *ngIf="true"
+                  class="svg-icon svg-icon-3"
+                ><button (click)="unBlock(item)" class="btn btn-primary">ACTV</button></span>
+              </a>
             </td>
 
           </tr>
